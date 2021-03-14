@@ -63,7 +63,7 @@ writable = setmetatable({
     local start, stop = start or utils.noop, nil
     local subscribers = { }
     local update, set, subscribe
-    update = (function(self, fn) set(fn(value)) end)
+    update = (function(self, fn) set(self, fn(value)) end)
     set = (function(self, new_value)
       if value ~= new_value then
         value = new_value
@@ -76,7 +76,7 @@ writable = setmetatable({
     end)
     subscribe = (function(self, fn)
       subscribers[#subscribers + 1] = fn
-      if #subscribers == 1 then stop = start(set) or utils.noop end
+      if #subscribers == 1 then stop = (start(set)) or utils.noop end
       fn(value)
       return (function()
         for i, fn_ in ipairs(subscribers) do
@@ -129,70 +129,16 @@ derived = setmetatable({
   __tostring = (function(self) return "derived: "..tostring(self:get()) end),
 }, {
   __index = readable,
-  __call = (function(self, stores, fn, initial)
-    local is_single = true
-    do
-      local error_message = "stores must be a sequence of stores or a single store."
-      if type(stores) ~= "table" then error(error_message) end
-      if stores[store] ~= true or stores[readable] ~= true then
-        if not utils.is_sequence(stores) then
-          error(error_message)
-        end
-        for _, store_ in ipairs(stores) do
-          if store_[store] ~= true or store[readable] ~= true then
-            error(error_message)
-          end
-        end
-        is_single = false
-      end
-    end
-    local derived = readable(initial, function(set)
-      local initialized, values, pending, cleanup, sync, unsubscribers
-      
-      initialized = false
-      values = { }
-      pending = 0
-      cleanup = utils.noop
-      
-      sync = (function()
-        if pending then return end
-        cleanup()
-        local result = fn(single and values[0] or values)
-        if type(result) == "function" then
-          cleanup = result
-        else
-          set(result)
-        end
-      end)
-      
-      unsubscribers = (function()
-        local unsubscribers = { }
-        for i, store in ipairs(stores) do
-          unsubscribers[#unsubscribers + 1] = subscribe(
-            store,
-            (function(value)
-              values[i] = value
-              pending = pending & ~(1 << i)
-              if initialized then sync() end
-            end),
-            (function() pending = pending | (1 << i) end))
-        end
-        return unsubscribers
-      end)()
-      
-      initialized = true
-      sync()
-      
-      return (function()
-        for _, unsubscriber in ipairs(unsubscribers) do unsubscriber() end
-        cleanup()
-      end)
-    end)
-    
-    derived[self] = true
-    derived = setmetatable(derived, self)
-    
-    return derived
+  __call = (function(self, store, fn)
+    local derived = writable(nil)
+    store:subscribe(function(value) derived:set(fn(value)) end)
+    return setmetatable({
+      [derived] = true,
+      [store] = true,
+      [readable] = true,
+      [monitor] = true,
+      subscribe = (function(self, fn) derived:subscribe(fn) end),
+    }, self)
   end),
   __name = "derived",
   __tostring = (function(self) return "derived" end),
