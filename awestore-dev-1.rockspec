@@ -18,7 +18,7 @@ source = {
   branch = "trunk",
 }
 
-dependencies = { "lua >= 5.3" }
+dependencies = { "lua >= 5.3", "luaposix >= 35.0" }
 
 build = {
   type = "make",

@@ -1,10 +1,17 @@
 local gears = require("gears")
 
+local posix = require("posix")
+
 local core = require("awestore.core")
 local easing = require("awestore.easing")
 local utils = require("awestore.utils")
 
-local get_interpolator, tweened
+local get_time, get_interpolator, tweened
+
+get_time = (function()
+  local sec, nsec = posix.clock_gettime(0)
+  return (sec * 1000) + (nsec * 1e-6)
+end)
 
 get_interpolator = (function(a, b)
   if a == b or a ~= a then return (function(_) return a; end); end
@@ -66,10 +73,10 @@ tweened = setmetatable({
     options.easing = options.easing or easing.linear
     options.interpolate = options.interpolate or get_interpolator
     
-    store = writable(value)
+    store = core.writable(value)
     
     set = (function(self, new_value, new_options)
-      for key, value in pairs(new_options) do options[key] = value; end
+      for key, value in pairs(new_options or { }) do options[key] = value; end
       
       local started = false
       local fn
@@ -78,15 +85,16 @@ tweened = setmetatable({
       
       if timer ~= nil then timer:stop() end
       
+      local now = get_time()
       local step = options.step
-      local start = (os.clock() * 1000) + options.delay
-      local stop = (os.clock() * 1000) + options.delay + options.duration
+      local start = now + options.delay
+      local stop = now + options.delay + options.duration
       
       timer = gears.timer {
         timeout = step / 1000,
         autostart = true,
         callback = (function()
-          local now = (os.clock() * 1000)
+          local now = get_time()
           
           if now < start then return end
           
@@ -102,9 +110,10 @@ tweened = setmetatable({
             store:set(new_value)
             timer:stop()
             timer = nil
+            return
           end
           
-          value = fn(options.easing(options.elapsed / options.duration))
+          value = fn(options.easing(elapsed / options.duration))
           store:set(value)
         end),
       }
