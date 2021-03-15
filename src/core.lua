@@ -115,7 +115,7 @@ monitor = setmetatable({
       [store] = true,
       [readable] = true,
       [monitor] = true,
-      subscribe = (function(self, fn) readable:subscribe(fn) end),
+      subscribe = (function(self, fn) return readable:subscribe(fn) end),
     }, self)
   end),
   __name = "monitor",
@@ -137,7 +137,7 @@ derived = setmetatable({
       [store] = true,
       [readable] = true,
       [monitor] = true,
-      subscribe = (function(self, fn) derived:subscribe(fn) end),
+      subscribe = (function(self, fn) return derived:subscribe(fn) end),
     }, self)
   end),
   __name = "derived",
