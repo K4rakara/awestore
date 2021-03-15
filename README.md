@@ -1,7 +1,7 @@
 # AweStore
 ### Sveltes store API for AwesomeWM.
 
-![demo](./demo.gif)
+<img src="./demo.gif" height="240"/> 
 
 > Huge thanks to [JavaCafe](https://github.com/JavaCafe01) for the demo GIF :)
 
