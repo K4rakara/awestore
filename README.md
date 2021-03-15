@@ -1,6 +1,10 @@
 # AweStore
 ### Sveltes store API for AwesomeWM.
 
+![demo](./demo.gif)
+
+> Huge thanks to [JavaCafe](https://github.com/JavaCafe01) for the demo GIF :)
+
 Installation:
 
 ```sh
