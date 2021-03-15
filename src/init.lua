@@ -1,6 +1,6 @@
 local core = require("awestore.core")
 local easing = require("awestore.easing")
-local tweened = require("awestore.tweened").tweened
+local tweened = require("awestore.tweened")
 
 return {
   derived = core.derived,

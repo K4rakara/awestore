@@ -63,7 +63,7 @@ tweened = setmetatable({
 }, {
   __index = core.readable,
   __call = (function(self, value, options)
-    local value, options = value, options
+    local value, options = value, options or { }
     local store, target, timer
     local set
     
@@ -128,9 +128,11 @@ tweened = setmetatable({
       subscribe = (function(self, fn) store:subscribe(fn) end),
     }, self)
   end),
+  __name = "tweened",
+  __tostring = (function(self) return "tweened" end),
 })
 
-return {
-  tweened = tweened,
-}
+tweened.__index = tweened
+
+return tweened
 
