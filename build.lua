@@ -45,7 +45,7 @@ end)
 end)()
 
 local minified = (function()
-  local cmd = "sh -c '[[ -e /usr/bin/luamin ]] && printf \"YES\"'"
+  local cmd = "sh -c '[ -e /usr/bin/luamin ] && printf \"YES\"'"
   if io.popen(cmd):read("*a"):sub(1, 3) == "YES" then
     local pipe = io.popen("sh -c 'luamin -c > /tmp/.awestore.luamin.out'", "w")
     pipe:write(bundled)
