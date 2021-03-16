@@ -69,7 +69,7 @@ tweened = setmetatable({
     
     options.delay = options.delay or 0
     options.duration = options.duration or 400
-    options.step = options.step or 8
+    options.step = options.step or 16
     options.easing = options.easing or easing.linear
     options.interpolate = options.interpolate or get_interpolator
     
