@@ -114,6 +114,8 @@ function readable(value, start)
 end
 
 function monitored(store_)
+  if store_[signal] == true then return store_:monitor(); end
+  
   local self = readable(nil, function(set)
     return store_:subscribe(function(value) set(value); end)
   end)
