@@ -74,7 +74,7 @@ function signal()
   local subscribers = { }
   
   function self:fire()
-    for _, subscriber in ipairs(subscribers) do fn(); end
+    for _, subscriber in ipairs(subscribers) do subscriber(); end
   end
   
   function self:subscribe(fn)
