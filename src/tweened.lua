@@ -82,7 +82,7 @@ function tweened(value, options)
   function self:set(new_value, new_options)
     for key, value in pairs(new_options or { }) do options[key] = value; end
     
-    local started = false
+    local started_ = false
     local fn
     
     target = new_value
@@ -102,10 +102,10 @@ function tweened(value, options)
         
         if now < start then return; end
         
-        if not started then
+        if not started_ then
           fn = options.interpolate(value, new_value)
           started:fire()
-          started = true
+          started_ = true
         end
         
         local elapsed = now - start
