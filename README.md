@@ -46,7 +46,7 @@ unsubscriber()
 my_store:set(3) -- prints nothing
 ```
 
-To create a read-only version of a `writable` store, you can use a `monitor`
+To create a read-only version of a `writable` store, you can use a `monitored`
 store:
 
 ```lua
@@ -54,14 +54,14 @@ local awestore = require "awestore"
 
 local my_writable_store = awestore.writable(1)
 
-local my_monitor_store = awestore.monitor(my_writable_store) -- or my_writable_store:monitor()
+local my_monitored_store = awestore.monitored(my_writable_store) -- or my_writable_store:monitor()
 
-my_monitor_store:subscribe(function(v) print(v); end) -- prints "1"
+my_monitored_store:subscribe(function(v) print(v); end) -- prints "1"
 
 my_store:set(2) -- prints "2"
 
 assert(type(my_writable_store.set) == "function")
-assert(type(my_monitor_store.set) == "nil")
+assert(type(my_monitored_store.set) == "nil")
 ```
 
 To alter the output of a store and forward it on, you can use a `derived`
@@ -83,6 +83,23 @@ my_store:set(3) -- prints "27"
 
 assert(type(my_writable_store.set) == "function")
 assert(type(my_monitor_store.set) == "nil")
+```
+
+Similarly, to only pass forward select outputs of a store, you can use a
+`filtered` store:
+
+```lua
+local awestore = require "awestore"
+
+local my_writable_store = awestore.writable(1)
+
+local my_filtered_store = awestore.filtered(my_writable_store, function(v)
+  return v % 2 == 0
+end) -- or my_writable_store:filter(fn)
+
+my_filtered_store:subscribe(function(v) print(v); end) -- prints "nil"
+
+for i = 2, 10 do my_writable_store:set(i) end -- prints "2", "4", "6", "8", "10"
 ```
 
 The final, and arguably most exciting type of store is `tweened`. It allows you

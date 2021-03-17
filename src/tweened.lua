@@ -8,12 +8,12 @@ local utils = require("awestore.utils")
 
 local get_time, get_interpolator, tweened
 
-get_time = (function()
+function get_time()
   local sec, nsec = posix.clock_gettime(0)
   return (sec * 1000) + (nsec * 1e-6)
-end)
+end
 
-get_interpolator = (function(a, b)
+function get_interpolator(a, b)
   if a == b or a ~= a then return (function(_) return a; end); end
   
   if type(a) ~= type(b) or utils.is_sequence(a) ~= utils.is_sequence(b) then
@@ -55,84 +55,86 @@ get_interpolator = (function(a, b)
   end
   
   error("Cannot interpolate values of type "..type(a)..".")
-end)
+end
 
-tweened = setmetatable({
-  __index = false,
-  __tostring = (function(self) return "tweened: "..tostring(self:get()); end),
-}, {
-  __index = core.readable,
-  __call = (function(self, value, options)
-    local value, options = value, options or { }
-    local store, target, timer
-    local set
-    
-    options.delay = options.delay or 0
-    options.duration = options.duration or 400
-    options.step = options.step or 16
-    options.easing = options.easing or easing.linear
-    options.interpolate = options.interpolate or get_interpolator
-    
-    store = core.writable(value)
-    
-    set = (function(self, new_value, new_options)
-      for key, value in pairs(new_options or { }) do options[key] = value; end
-      
-      local started = false
-      local fn
-      
-      target = new_value
-      
-      if timer ~= nil then timer:stop() end
-      
-      local now = get_time()
-      local step = options.step
-      local start = now + options.delay
-      local stop = now + options.delay + options.duration
-      
-      timer = gears.timer {
-        timeout = step / 1000,
-        autostart = true,
-        callback = (function()
-          local now = get_time()
-          
-          if now < start then return end
-          
-          if not started then
-            fn = options.interpolate(value, new_value)
-            started = true
-          end
-          
-          local elapsed = now - start
-          
-          if elapsed > options.duration then
-            value = new_value
-            store:set(new_value)
-            timer:stop()
-            timer = nil
-            return
-          end
-          
-          value = fn(options.easing(elapsed / options.duration))
-          store:set(value)
-        end),
-      }
-    end)
-    
-    return setmetatable({
-      [core.store] = true,
-      [core.readable] = true,
-      [core.writable] = true,
-      [tweened] = true,
-      set = set,
-      subscribe = (function(self, fn) store:subscribe(fn) end),
-    }, self)
-  end),
-  __name = "tweened",
-  __tostring = (function(self) return "tweened" end),
-})
+function tweened(value, options)
+  local self = {
+    [core.store] = true,
+    [core.readable] = true,
+    [core.writable] = true,
+  }
+  local value, options = value, options or { }
+  local store, ended, target, timer
+  
+  options.delay = options.delay or 0
+  options.duration = options.duration or 400
+  options.step = options.step or 32
+  options.easing = options.easing or easing.linear
+  options.interpolate = options.interpolate or get_interpolator
+  
+  store = core.writable(value)
+  started = core.signal()
+  ended = core.signal()
 
-tweened.__index = tweened
+  self.started = started:monitor()
+  self.ended = ended:monitor()
+  
+  function self:set(new_value, new_options)
+    for key, value in pairs(new_options or { }) do options[key] = value; end
+    
+    local started_ = false
+    local fn
+    
+    target = new_value
+    
+    if timer ~= nil then timer:stop() end
+    
+    local now = get_time()
+    local step = options.step
+    local start = now + options.delay
+    local stop = now + options.delay + options.duration
+    
+    timer = gears.timer {
+      timeout = step / 1000,
+      autostart = true,
+      callback = function()
+        local now = get_time()
+        
+        if now < start then return; end
+        
+        if not started_ then
+          fn = options.interpolate(value, new_value)
+          started:fire()
+          started_ = true
+        end
+        
+        local elapsed = now - start
+        
+        if elapsed > options.duration then
+          value = new_value
+          store:set(new_value)
+          ended:fire()
+          timer:stop()
+          timer = nil
+          return
+        end
+        
+        value = fn(options.easing(elapsed / options.duration))
+        store:set(value)
+      end,
+    }
+  end
+  
+  function self:subscribe(fn) return store:subscribe(fn); end
+  
+  function self:monitor(fn) return core.monitor(self, fn); end
+  
+  function self:derive(fn) return core.derived(self, fn); end
+  
+  function self:filter(fn) return core.filtered(self, fn); end
+  
+  return self
+end
 
 return tweened
 
