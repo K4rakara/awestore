@@ -60,6 +60,16 @@ function writable(value, start)
 end
 
 function signal()
+  local function signal_monitored(signal)
+    local self = { [store] = true, [readable] = true, [monitored] = true, }
+    
+    function self:subscribe(fn)
+      return signal:subscribe(fn)
+    end
+    
+    return self
+  end
+  
   local self = { [store] = true, [readable] = true, [signal] = true, }
   local subscribers = { }
   
@@ -77,13 +87,7 @@ function signal()
     end
   end
   
-  function self:get() return; end
-  
-  function self:monitor() return monitored(self); end
-  
-  function self:derive(fn) return derived(self, fn); end
-  
-  function self:filter(fn) return filtered(self, fn); end
+  function self:monitor() return signal_monitored(self); end
   
   return self
 end
