@@ -6,10 +6,10 @@ description = {
   homepage = "https://github.com/K4rakara/awestore",
   license = "MIT",
   detailed = [[
-    # AweStore
-    ### Sveltes store API for AwesomeWM.
-    
-    -- TODO
+    This library is built off the concept of stores from Svelte. A store is a
+    simple table that can be subscribed to, notifying intrested parties
+    whenever the stored value changes. For more info, see
+    https://github.com/K4rakara/awestore.
   ]],
 }
 
