@@ -15,7 +15,7 @@ sudo luarocks --lua-version 5.3 install awestore
 
 This library is built off the concept of _stores_ from
 [Svelte](https://svelte.dev). A store is a simple table that can be subscribed
-to, notifying intrested parties whenever the _stored_ value changes. Heres
+to, notifying interested parties whenever the _stored_ value changes. Heres
 simple example:
 
 ```lua

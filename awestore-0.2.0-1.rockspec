@@ -7,7 +7,7 @@ description = {
   license = "MIT",
   detailed = [[
     This library is built off the concept of stores from Svelte. A store is a
-    simple table that can be subscribed to, notifying intrested parties
+    simple table that can be subscribed to, notifying interested parties
     whenever the stored value changes. For more info, see
     https://github.com/K4rakara/awestore.
   ]],
