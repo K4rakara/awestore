@@ -58,6 +58,15 @@ function writable(value, start)
     end
   end
   
+  function self:subscribe_once(fn)
+    local unsubscriber
+    local unsubscriber = self:subscribe_next(function(value)
+      unsubscriber()
+      fn(value)
+    end)
+    return unsubscriber
+  end
+  
   function self:update(fn) self:set(fn(value)); end
   
   function self:derive(fn) return derived(self, fn); end
@@ -105,6 +114,15 @@ function signal()
     end
   end
   
+  function self:subscribe_once(fn)
+    local unsubscriber
+    unsubscriber = self:subscribe(function(value)
+      unsubscriber()
+      fn(value)
+    end)
+    return unsubscriber
+  end
+  
   function self:monitor() return signal_monitored(self); end
   
   return self
@@ -117,6 +135,8 @@ function readable(value, start)
   function self:subscribe(fn) return inner:subscribe(fn); end
   
   function self:subscribe_next(fn) return inner:subscribe_next(fn); end
+  
+  function self:subscribe_once(fn) return inner:subscribe_once(fn); end
   
   function self:derive(fn) return derived(self, fn); end
   
