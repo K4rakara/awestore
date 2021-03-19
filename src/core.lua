@@ -116,6 +116,8 @@ function readable(value, start)
   
   function self:subscribe(fn) return inner:subscribe(fn); end
   
+  function self:subscribe_next(fn) return inner:subscribe_next(fn); end
+  
   function self:derive(fn) return derived(self, fn); end
   
   function self:get()
