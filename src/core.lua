@@ -81,8 +81,10 @@ function signal()
     subscribers[#subscribers + 1] = fn
     return function()
       for i, fn_ in ipairs(subscribers) do
-        if fn_ == fn then table.remove(subscribers, i); end
-        break
+        if fn_ == fn then
+          table.remove(subscribers, i)
+          break
+        end
       end
     end
   end
