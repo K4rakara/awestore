@@ -58,6 +58,15 @@ function writable(value, start)
     end
   end
   
+  function self:subscribe_once(fn)
+    local unsubscriber
+    local unsubscriber = self:subscribe_next(function(value)
+      unsubscriber()
+      fn(value)
+    end)
+    return unsubscriber
+  end
+  
   function self:update(fn) self:set(fn(value)); end
   
   function self:derive(fn) return derived(self, fn); end
