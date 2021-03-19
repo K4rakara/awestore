@@ -92,6 +92,10 @@ function signal()
       return signal:subscribe(fn)
     end
     
+    function self:subscribe_once(fn)
+      return signal:subscribe_once(fn)
+    end
+    
     return self
   end
   
