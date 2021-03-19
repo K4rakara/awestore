@@ -42,6 +42,22 @@ function writable(value, start)
     end
   end
   
+  function self:subscribe_next(fn)
+    subscribers[#subscribers + 1] = fn
+    if #subscribers == 1 then
+      stop = (start(function(value) self:set(value); end)) or utils.noop
+    end
+    return function()
+      for i, fn_ in ipairs(subscribers) do
+        if fn_ == fn then
+          table.remove(subscribers, i)
+          break
+        end
+      end
+      if #subscribers == 0 then stop(); stop = nil; end
+    end
+  end
+  
   function self:update(fn) self:set(fn(value)); end
   
   function self:derive(fn) return derived(self, fn); end
