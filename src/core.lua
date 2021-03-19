@@ -114,6 +114,15 @@ function signal()
     end
   end
   
+  function self:subscribe_once(fn)
+    local unsubscriber
+    unsubscriber = self:subscribe(function(value)
+      unsubscriber()
+      fn(value)
+    end)
+    return unsubscriber
+  end
+  
   function self:monitor() return signal_monitored(self); end
   
   return self
