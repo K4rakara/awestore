@@ -1,5 +1,5 @@
 package = "awestore"
-version = "0.2.2-1"
+version = "0.2.3-1"
 
 description = {
   summary = "Sveltes store API for AwesomeWM.",
@@ -15,7 +15,7 @@ description = {
 
 source = {
   url = "git://github.com/K4rakara/awestore.git",
-  branch = "v0.2.2",
+  branch = "v0.2.3",
 }
 
 dependencies = { "lua >= 5.3", "luaposix >= 35.0" }
