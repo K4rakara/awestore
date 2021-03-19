@@ -127,6 +127,8 @@ function tweened(value, options)
   
   function self:subscribe(fn) return store:subscribe(fn); end
   
+  function self:subscribe_next(fn) return store:subscribe_next(fn); end
+  
   function self:get() return store:get(); end
   
   function self:monitor(fn) return core.monitor(self, fn); end
