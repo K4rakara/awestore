@@ -85,20 +85,6 @@ function writable(value, start)
 end
 
 function signal()
-  local function signal_monitored(signal)
-    local self = { [store] = true, [readable] = true, [monitored] = true, }
-    
-    function self:subscribe(fn)
-      return signal:subscribe(fn)
-    end
-    
-    function self:subscribe_once(fn)
-      return signal:subscribe_once(fn)
-    end
-    
-    return self
-  end
-  
   local self = { [store] = true, [readable] = true, [signal] = true, }
   local subscribers = { }
   
@@ -127,7 +113,7 @@ function signal()
     return unsubscriber
   end
   
-  function self:monitor() return signal_monitored(self); end
+  function self:monitor() return monitored(self); end
   
   return self
 end
@@ -158,13 +144,23 @@ function readable(value, start)
 end
 
 function monitored(store_)
-  if store_[signal] == true then return store_:monitor(); end
+  local self = { [store] = true, [readable] = true, [monitored] = true }
   
-  local self = readable(nil, function(set)
-    return store_:subscribe(function(value) set(value); end)
-  end)
+  if store_[signal] == true then self[signal] = true; end
   
-  self[monitored] = true
+  function self:subscribe(fn) return store_:subscribe(fn); end
+  
+  function self:subscribe_next(fn) return store_:subscribe_next(fn); end
+  
+  function self:subscribe_once(fn) return store_:subscribe_once(fn); end
+  
+  function self:derive(fn) return derived(self, fn); end
+  
+  function self:get() return store:get(); end
+  
+  function self:monitor() return monitored(self); end
+  
+  function self:filter(fn) return filtered(self, fn); end
   
   return self
 end
