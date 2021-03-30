@@ -34,7 +34,7 @@ function get_interpolator(a, b)
     end)
   end
   
-  if type(a) == "object" then
+  if type(a) == "table" then
     local interpolators = { }
     for key, _ in pairs(b) do
       interpolators[key] = get_interpolator(a[key], b[key])
