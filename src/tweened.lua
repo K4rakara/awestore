@@ -64,7 +64,7 @@ function tweened(value, options)
     [core.writable] = true,
   }
   local value, options = value, options or { }
-  local store, ended, target, timer
+  local store, started, ended, target, timer
   
   options.delay = options.delay or 0
   options.duration = options.duration or 400

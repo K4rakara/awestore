@@ -5,6 +5,7 @@ local circ_in_out, circ_in, circ_out
 local cubic_in_out, cubic_in, cubic_out
 local elastic_in_out, elastic_in, elastic_out
 local expo_in_out, expo_in, expo_out
+local quad_in_out, quad_in, quad_out
 local quart_in_out, quart_in, quart_out
 local quint_in_out, quint_in, quint_out
 local sine_in_out, sine_in, sine_out
@@ -90,20 +91,20 @@ end)
 elastic_in_out = (function(t)
   return (t < 0.5)
     and (0.5
-      * math.sin(((13.0 * Math.PI) / 2) * 2.0 * t)
+      * math.sin(((13.0 * math.pi) / 2) * 2.0 * t)
       * (2.0 ^ (10.0 * (2.0 * t - 1.0))))
     or  (0.5
-      * math.sin(((-13.0 * Math.PI) / 2) * (2.0 * t - 1.0 + 1.0))
+      * math.sin(((-13.0 * math.pi) / 2) * (2.0 * t - 1.0 + 1.0))
       * (2.0 ^ (-10.0 * (2.0 * t - 1.0)))
       + 1.0)
 end)
 
 elastic_in = (function(t)
-  return math.sin((13.0 * t * Math.PI) / 2) * (2.0 ^ (10.0 * (t - 1.0)))
+  return math.sin((13.0 * t * math.pi) / 2) * (2.0 ^ (10.0 * (t - 1.0)))
 end)
 
 elastic_out = (function(t)
-  return math.sin((-13.0 * (t + 1.0) * Math.PI) / 2) * (2.0 ^ (-10.0 * t)) + 1.0
+  return math.sin((-13.0 * (t + 1.0) * math.pi) / 2) * (2.0 ^ (-10.0 * t)) + 1.0
 end)
 
 expo_in_out = (function(t)
@@ -160,7 +161,7 @@ end)
 sine_in_out = (function(t) return -0.5 * (math.cos(math.pi * t) - 1); end)
 
 sine_in = (function(t)
-  v = math.cos(t * math.pi * 0.5)
+  local v = math.cos(t * math.pi * 0.5)
   if math.abs(v) < 1e-14 then return 1; end
   return 1 - v
 end)
