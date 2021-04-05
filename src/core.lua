@@ -156,7 +156,7 @@ function monitored(store_)
   
   function self:derive(fn) return derived(self, fn); end
   
-  function self:get() return store:get(); end
+  function self:get() return store_:get(); end
   
   function self:monitor() return monitored(self); end
   
