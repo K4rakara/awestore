@@ -64,6 +64,7 @@ function tweened(value, options)
     [core.writable] = true,
   }
   local value, options = value, options or { }
+  local initial, last = value, value
   local store, started, ended, target, timer
   
   options.delay = options.delay or 0
@@ -75,7 +76,7 @@ function tweened(value, options)
   store = core.writable(value)
   started = core.signal()
   ended = core.signal()
-
+  
   self.started = started:monitor()
   self.ended = ended:monitor()
   
@@ -85,6 +86,7 @@ function tweened(value, options)
     local started_ = false
     local fn
     
+    last = target
     target = new_value
     
     if timer ~= nil then timer:stop() end
@@ -132,6 +134,10 @@ function tweened(value, options)
   function self:subscribe_once(fn) return store:subscribe_once(fn); end
   
   function self:get() return store:get(); end
+  
+  function self:initial() return initial; end
+  
+  function self:last() return last; end
   
   function self:monitor(fn) return core.monitor(self, fn); end
   
