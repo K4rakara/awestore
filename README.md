@@ -162,8 +162,44 @@ A smooth, unintrusive animation
 
 https://user-images.githubusercontent.com/74227209/115180222-29d9e480-a0e6-11eb-9539-d3ad6d521eaf.mov
 
-## cubic_in_out
+### cubic_in_out
 
 An animation similar to circ_in_out
 
 https://user-images.githubusercontent.com/74227209/115180390-81785000-a0e6-11eb-82c3-b32605c4dfb0.mov
+
+### elastic_in_out
+
+An animation that mimicks an elastic band
+
+https://user-images.githubusercontent.com/74227209/115180547-de740600-a0e6-11eb-96d7-db712bd779eb.mov
+
+### expo_in_out
+
+This animation smoothly slides out of view
+
+https://user-images.githubusercontent.com/74227209/115180643-2bf07300-a0e7-11eb-8b94-273bf7ea656d.mov
+
+### quad_in_out
+
+An animation similar to circ_in_out and cubic_in_out
+
+https://user-images.githubusercontent.com/74227209/115180784-78d44980-a0e7-11eb-9071-d03c239e0aef.mov
+
+### quart_in_out
+
+An animation visually similar to quad_in_out
+
+https://user-images.githubusercontent.com/74227209/115180866-aa4d1500-a0e7-11eb-9a83-b1ba79a3a143.mov
+
+### quint_in_out
+
+An animation that slides out of view
+
+https://user-images.githubusercontent.com/74227209/115180956-db2d4a00-a0e7-11eb-92b8-c58b8bd6e0f5.mov
+
+### sine_in_out
+
+An animation that increases in speed as it slides out of view
+
+https://user-images.githubusercontent.com/74227209/115181048-162f7d80-a0e8-11eb-8733-b8c846b2c2aa.mov
