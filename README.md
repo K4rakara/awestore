@@ -134,4 +134,36 @@ my_tweened:set(1) -- prints "-0.027..."
                   -- prints " 1"
 ```
 
+## Animations
 
+There are a variety of animations available.
+
+### linear
+
+A linear animation
+
+https://user-images.githubusercontent.com/74227209/115179817-3d388000-a0e5-11eb-80e1-00fad225c7dd.mov
+
+### back_in_out
+
+An animation that goes above the target location, then snaps back
+
+https://user-images.githubusercontent.com/74227209/115179928-7d97fe00-a0e5-11eb-8c5b-c03eb0bdfe6a.mov
+
+### bounce_in_out
+
+This animations has a small bounce effect
+
+https://user-images.githubusercontent.com/74227209/115180122-e5e6df80-a0e5-11eb-9c02-b1b7ae773500.mov
+
+### circ_in_out
+
+A smooth, unintrusive animation
+
+https://user-images.githubusercontent.com/74227209/115180222-29d9e480-a0e6-11eb-9539-d3ad6d521eaf.mov
+
+## cubic_in_out
+
+An animation similar to circ_in_out
+
+https://user-images.githubusercontent.com/74227209/115180390-81785000-a0e6-11eb-82c3-b32605c4dfb0.mov
